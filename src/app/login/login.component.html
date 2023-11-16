@@ -1,0 +1,39 @@
+<div class="split left">
+  <div class="centered">
+    <div class="welcome-message">
+      <h1>Welcome To Project Management System</h1>
+    </div>
+  </div>
+</div>
+
+<div class="split right">
+  <div class="centered">
+    <div class="row">
+      <div class="login-container">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="customLabel">Login</h2>
+          </div>
+
+          <div class="card-body">
+            <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
+              <label>Email:</label>
+              <input type="email" formControlName="email" required />
+
+              <label>Password:</label>
+              <input type="password" formControlName="password" required />
+
+              <button type="submit" [disabled]="loginForm.invalid">
+                Login
+              </button>
+            </form>
+
+            <p>
+              Don't have an account? <a routerLink="/signup">Register here</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,110 @@
+/* signup.component.css */
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.card {
+    width: 400px; /* Adjusted width */
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background: linear-gradient(to bottom, #7e57c5, #774eb1, #70459e, #673c8b, #5e3479); /* Gradient background */
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+}
+
+input,
+button {
+    margin-bottom: 15px;
+}
+
+.split {
+    height: 100%;
+    width: 50%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.left {
+    left: 0;
+    background-image: linear-gradient(to bottom, #7e57c5, #774eb1, #70459e, #673c8b, #5e3479);
+}
+
+.right {
+    right: 0;
+    background-color: white;
+}
+
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.login-heading {
+    color: #7e57c5;
+    margin-top: 0;
+}
+
+#myTabs {
+    font-size: 18px;
+}
+
+#myTabs .nav-item {
+    margin-right: 15px;
+}
+
+#myTabs .nav-link {
+    padding: 10px 20px;
+}
+/* .customLabel{
+    color: black;
+} */
+.welcome-message {
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 24px;
+    opacity: 0;
+    animation: slideIn 1s ease-in-out forwards;
+}
+
+@keyframes slideIn {
+    0% {
+        left: -100%; 
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        left: 10%;
+        opacity: 1;
+    }
+}
