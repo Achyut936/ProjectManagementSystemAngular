@@ -18,10 +18,40 @@
           <div class="card-body">
             <form [formGroup]="signupForm" (ngSubmit)="onSignupSubmit()">
               <label>Email:</label>
-              <input type="email" formControlName="email" required />
+              <input
+                type="email"
+                formControlName="email"
+                [ngClass]="{
+                  'invalid-email':
+                    signupForm.get('email')?.invalid &&
+                    signupForm.get('email')?.touched
+                }"
+                required
+              />
 
+              <div *ngIf="signupForm.get('email')?.hasError('required') && signupForm.get('email')?.touched" class="error-message">
+                Email is required
+              </div>
+
+              <div
+                *ngIf="
+                  signupForm.get('email')?.hasError('email') &&
+                  signupForm.get('email')?.touched
+                "
+                class="error-message"
+              >
+                Invalid email format
+              </div>
               <label>Password:</label>
               <input type="password" formControlName="password" required />
+
+              <div *ngIf="signupForm.get('password')?.hasError('required') && signupForm.get('password')?.touched" class="error-message">
+                Password is required
+              </div>
+
+              <div *ngIf="signupForm.get('password')?.hasError('pattern') && signupForm.get('password')?.touched" class="error-message">
+                Password must be at least 6 characters long and include at least 1 special character and 1 number.
+              </div>
 
               <button type="submit" [disabled]="signupForm.invalid">
                 Sign Up

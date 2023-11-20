@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { SupaService } from '../Service/supa.service';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -13,7 +14,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private auth: SupaService
+    private auth: SupaService,private toastr: ToastrService
   ) {}
 
   ngOnInit() {
@@ -24,6 +25,11 @@ export class LoginComponent implements OnInit {
   }
 
   onLoginSubmit() {
+    if (this.loginForm.get('email')?.value.trim() === '' || this.loginForm.get('password')?.value === '') {
+      this.toastr.error('Email and password are required fields.');
+      return;
+    }
+
     if (this.loginForm.valid) {
       console.log('Login submitted', this.loginForm.value);
       this.auth
@@ -31,20 +37,18 @@ export class LoginComponent implements OnInit {
         .then((result) => {
           console.log(result);
           if (result.data.user?.role === 'authenticated') {
+            this.toastr.success("Login Successful")
             this.router.navigate(['/dashboard']);
           } else {
-            
-            alert('Invalid credentials. Please try again.');
+            this.toastr.error('Invalid credentials. Please try again.');
           }
         })
         .catch((error) => {
           console.log(error);
-          
-          alert('An error occurred during login. Please try again.');
+          this.toastr.error('An error occurred during login. Please try again.');
         });
     } else {
-      
-      alert('Invalid form. Please fill in all required fields.');
+      this.toastr.error('Invalid form. Please fill in all required fields.');
     }
   }
 }

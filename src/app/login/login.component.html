@@ -18,7 +18,23 @@
           <div class="card-body">
             <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
               <label>Email:</label>
-              <input type="email" formControlName="email" required />
+              <input
+                type="email"
+                formControlName="email"
+                [ngClass]="{
+                  'invalid-email':
+                    loginForm.get('email')?.invalid &&
+                    loginForm.get('email')?.touched
+                }"
+                required
+              />
+              <div *ngIf="loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched" class="error-message">
+                Email is required
+              </div>
+              
+              <div *ngIf="loginForm.get('email')?.hasError('email') && loginForm.get('email')?.touched" class="error-message">
+                Invalid email format
+              </div>
 
               <label>Password:</label>
               <input type="password" formControlName="password" required />

@@ -121,3 +121,14 @@ button {
     opacity: 1;
   }
 }
+
+.invalid-email {
+  border: 2px solid #ff6262; /* Red color for better visibility */
+}
+
+.error-message {
+  color: #ff6262; /* Red color for error text */
+  font-size: 14px;
+  margin-top: 5px;
+}
+
