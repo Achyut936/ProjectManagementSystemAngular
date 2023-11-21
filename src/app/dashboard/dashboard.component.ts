@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectDataService } from '../Service/project-data.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,19 +30,15 @@ export class DashboardComponent implements OnInit {
   checkedProjectIds: number[] = [];
   selectAll: boolean = false;
 
-  constructor(private projectData: ProjectDataService) {}
+  constructor(
+    private projectData: ProjectDataService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit() {
     this.getAllProjects();
-    // this.getProjectByMonth();
     this.getAllProjectNames();
   }
-
-  // getAllProjects() {
-  //   this.projectData.getAllProjects().subscribe((data) => {
-  //     this.Projects = data as any[];
-  //   });
-  // }
 
   getAllProjects() {
     this.projectData.getAllProjects().subscribe((data) => {
@@ -81,40 +78,20 @@ export class DashboardComponent implements OnInit {
       });
   }
 
-  // selectProject(project: any) {
-  //   this.getProjectById(project.projectId);
-  // }
-
-  // selectProject(project: any) {
-  //   if (project.checked) {
-  //     this.checkedProjectIds.push(project.projectId);
-  //   } else {
-  //     const index = this.checkedProjectIds.indexOf(project.projectId);
-  //     if (index !== -1) {
-  //       this.checkedProjectIds.splice(index, 1);
-  //     }
-  //   }
-  //   this.updateFilteredProjects();
-  // }
-
   selectProject(project: any) {
     if (project.checked) {
       this.projectData
         .getProjectDetailById(project.projectId)
         .subscribe((data) => {
           const selectedProject = data as any;
-
-          // Check if the project is already in filteredProjects
           const index = this.filteredProjects.findIndex(
             (p) => p.projectId === selectedProject.projectId
           );
 
-          // If the project is not in filteredProjects, add it
           if (index === -1) {
             this.filteredProjects.push(selectedProject);
             this.checkedProjectIds.push(selectedProject.projectId);
           } else {
-            // If the project is already in filteredProjects, update its details
             this.filteredProjects[index] = selectedProject;
           }
         });
@@ -123,9 +100,6 @@ export class DashboardComponent implements OnInit {
     }
   }
 
- 
-  
-  
   removeUncheckedProject(projectId: number) {
     const index = this.filteredProjects.findIndex(
       (p) => p.projectId === projectId
@@ -138,13 +112,6 @@ export class DashboardComponent implements OnInit {
       );
     }
   }
-  // selectAllProjects() {
-  //   this.Projects.forEach((project) => {
-  //     project.checked = this.selectAll;
-  //   });
-
-  //   this.filterProjectsByProject();
-  // }
 
   selectAllProjects() {
     this.Projects.forEach((project) => {
@@ -179,6 +146,7 @@ export class DashboardComponent implements OnInit {
     link.click();
 
     document.body.removeChild(link);
+    this.toastr.success('File Downloaded Successfully');
   }
 
   generateCSVData() {

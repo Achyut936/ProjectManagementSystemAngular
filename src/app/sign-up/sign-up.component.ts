@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { SupaService } from '../Service/supa.service';
 import { ToastrService } from 'ngx-toastr';
@@ -11,20 +16,42 @@ import { ToastrService } from 'ngx-toastr';
 export class SignUpComponent implements OnInit {
   signupForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router, private auth: SupaService,private toastr: ToastrService) {}
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private auth: SupaService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit() {
-    this.signupForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(6),
-          Validators.pattern(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/),
+    this.signupForm = this.fb.group(
+      {
+        email: ['', [Validators.required, Validators.email]],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(6),
+            Validators.pattern(
+              /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/
+            ),
+          ],
         ],
-      ],
-    });
+        confirmPassword: ['', [Validators.required]],
+      },
+      { validators: this.passwordMatchValidator }
+    );
+  }
+  passwordMatchValidator(control: AbstractControl) {
+    const password = control.get('password')?.value;
+    const confirmPassword = control.get('confirmPassword')?.value;
+
+    if (password === confirmPassword) {
+      return null;
+    } else {
+      control.get('confirmPassword')?.setErrors({ passwordMismatch: true });
+      return { passwordMismatch: true };
+    }
   }
 
   onSignupSubmit() {
@@ -33,18 +60,15 @@ export class SignUpComponent implements OnInit {
       this.auth
         .signUp(this.signupForm.value.email, this.signupForm.value.password)
         .then(() => {
-          // Display a success alert
-          // alert('Signup successful!');
           this.toastr.success('Signup Successful');
           this.router.navigate(['/login']);
         })
         .catch((error) => {
           console.log(error);
-          // alert('An error occurred during signup. Please try again.');
-          
-          this.toastr.error("An error occurred during signup. Please try again.")
+          this.toastr.error(
+            'An error occurred during signup. Please try again.'
+          );
         });
     }
   }
 }
-  
