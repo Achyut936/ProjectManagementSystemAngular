@@ -167,8 +167,8 @@ export class DashboardComponent implements OnInit {
         project.projectId,
         project.projectName,
         project.client,
-        this.formatDate(project.startDate),
-        this.formatDate(project.endDate),
+        project.startDate,
+        project.endDate,
         project.country,
         project.budget,
         project.status,
@@ -183,7 +183,4 @@ export class DashboardComponent implements OnInit {
     this.filteredProjects = this.Projects.filter((project) => project.checked);
   }
 
-  formatDate(date: any) {
-    return date;
-  }
 }
