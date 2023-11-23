@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectDataService } from '../Service/project-data.service';
 import { ToastrService } from 'ngx-toastr';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,7 +33,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private projectData: ProjectDataService,
-    private toastr: ToastrService
+    private toastr: ToastrService,private ngxService: NgxUiLoaderService
   ) {}
 
   ngOnInit() {
@@ -135,6 +136,7 @@ export class DashboardComponent implements OnInit {
   }
 
   exportToCSV() {
+    this.ngxService.start();
     const csvData = this.generateCSVData();
     const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
 
@@ -146,6 +148,7 @@ export class DashboardComponent implements OnInit {
     link.click();
 
     document.body.removeChild(link);
+    this.ngxService.stop();
     this.toastr.success('File Downloaded Successfully');
   }
 
