@@ -17,7 +17,12 @@
 
           <div class="card-body">
             <form [formGroup]="signupForm" (ngSubmit)="onSignupSubmit()">
-              <input placeholder="Email"
+              <label for="email"
+                >Email<span class="required-field">*</span></label
+              >
+              <input
+                id="email"
+                placeholder="Email"
                 type="email"
                 formControlName="email"
                 [ngClass]="{
@@ -47,7 +52,17 @@
               >
                 Invalid email format
               </div>
-              <input placeholder="Password" type="password" formControlName="password" required />
+
+              <label for="password"
+                >Password<span class="required-field">*</span></label
+              >
+              <input
+                id="password"
+                placeholder="Password"
+                type="password"
+                formControlName="password"
+                required
+              />
 
               <div
                 *ngIf="
@@ -70,7 +85,12 @@
                 1 special character and 1 number.
               </div>
 
-              <input placeholder="Confirm Password"
+              <label for="confirmPassword"
+                >Confirm Password<span class="required-field">*</span></label
+              >
+              <input
+                id="confirmPassword"
+                placeholder="Confirm Password"
                 type="password"
                 formControlName="confirmPassword"
                 [ngClass]="{
@@ -90,6 +110,7 @@
               >
                 Confirm Password is required
               </div>
+
               <div
                 *ngIf="
                   signupForm.hasError('passwordMismatch') &&
@@ -99,6 +120,7 @@
               >
                 Passwords do not match
               </div>
+
               <button type="submit" [disabled]="signupForm.invalid">
                 Sign Up
               </button>

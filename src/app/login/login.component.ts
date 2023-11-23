@@ -38,6 +38,7 @@ export class LoginComponent implements OnInit {
           console.log(result);
           if (result.data.user?.role === 'authenticated') {
             this.toastr.success("Login Successful")
+            localStorage.setItem('token','847581de5f3a');
             this.router.navigate(['/dashboard']);
           } else {
             this.toastr.error('Invalid credentials. Please try again.');

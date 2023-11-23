@@ -11,6 +11,7 @@ export class HeaderComponent {
   constructor(private auth: SupaService, private router: Router) {}
   logOut() {
     this.auth.signOut().then(() => {
+      localStorage.removeItem('token');
       this.router.navigate(['/login']);
     });
   }

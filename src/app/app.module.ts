@@ -13,6 +13,8 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { LoginComponent } from './login/login.component';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
 
 @NgModule({
   declarations: [
@@ -21,14 +23,22 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HeaderComponent,
     SignUpComponent,
     LoginComponent,
-    
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,HttpClientModule,FormsModule,NgSelectModule,BrowserAnimationsModule,ReactiveFormsModule, 
-    ToastrModule.forRoot(), 
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    NgSelectModule,
+    BrowserAnimationsModule,
+    ReactiveFormsModule,
+    ToastrModule.forRoot(),
+    ToastrModule,
+    NgxSpinnerModule.forRoot(),
+    NgxUiLoaderModule,
+    NgxUiLoaderHttpModule.forRoot({ showForeground: true }),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

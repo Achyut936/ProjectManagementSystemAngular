@@ -5,8 +5,12 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { environment } from 'src/enviornment';
 import { Router } from '@angular/router';
 import { SupaService } from '../Service/supa.service';
+
+import { createClient } from '@supabase/supabase-js';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-sign-up',
@@ -15,15 +19,21 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class SignUpComponent implements OnInit {
   signupForm!: FormGroup;
-
+  uid = 20;
+  supabaseClient = createClient(
+    environment.supabaseUrl,
+    environment.supabaseKey
+  );
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private auth: SupaService,
-    private toastr: ToastrService
+    private toastr:ToastrService,
+    private ngxService: NgxUiLoaderService
   ) {}
 
   ngOnInit() {
+    
     this.signupForm = this.fb.group(
       {
         email: ['', [Validators.required, Validators.email]],
@@ -54,12 +64,32 @@ export class SignUpComponent implements OnInit {
     }
   }
 
-  onSignupSubmit() {
+  async onSignupSubmit() {
+    const existingUser = await this.supabaseClient
+      .from('projectAuthTable')
+      .select('*')
+      .eq('email', this.signupForm.value.email)
+      .single();
+
+    if (existingUser.data) {
+      // User already exists
+      this.toastr.error('User with this email already exists');
+      return;
+    }
+
     if (this.signupForm.valid) {
-      console.log('Signup submitted', this.signupForm.value);
+      const { email, password } = this.signupForm.value;
+      const id = this.uid++; // Generate a UUID for the user
+
+      console.log('Signup submitted', { email, password, id });
+
       this.auth
-        .signUp(this.signupForm.value.email, this.signupForm.value.password)
-        .then(() => {
+        .signUp(email, password)
+        .then(async () => {
+          const { data, error } = await this.supabaseClient
+            .from('projectAuthTable')
+            .upsert([{ id, email, password }]);
+
           this.toastr.success('Signup Successful');
           this.router.navigate(['/login']);
         })

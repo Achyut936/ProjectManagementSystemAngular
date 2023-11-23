@@ -17,6 +17,7 @@
 
           <div class="card-body">
             <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
+              <label for="email">Email<span class="required-field">*</span></label>
               <input placeholder="Email"
                 type="email"
                 formControlName="email"
@@ -35,6 +36,7 @@
                 Invalid email format
               </div>
 
+              <label for="password">Password<span class="required-field">*</span></label>
               <input placeholder="Password" type="password" formControlName="password" required />
 
               <button type="submit" [disabled]="loginForm.invalid">
