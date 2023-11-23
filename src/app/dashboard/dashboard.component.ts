@@ -33,7 +33,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private projectData: ProjectDataService,
-    private toastr: ToastrService,private ngxService: NgxUiLoaderService
+    private toastr: ToastrService,
+    private ngxService: NgxUiLoaderService
   ) {}
 
   ngOnInit() {
@@ -185,5 +186,4 @@ export class DashboardComponent implements OnInit {
   filterProjectsByProject() {
     this.filteredProjects = this.Projects.filter((project) => project.checked);
   }
-
 }
