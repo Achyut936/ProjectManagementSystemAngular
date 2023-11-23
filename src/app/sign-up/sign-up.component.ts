@@ -65,6 +65,7 @@ export class SignUpComponent implements OnInit {
   }
 
   async onSignupSubmit() {
+    this.ngxService.start();
     const existingUser = await this.supabaseClient
       .from('projectAuthTable')
       .select('*')
@@ -72,6 +73,7 @@ export class SignUpComponent implements OnInit {
       .single();
 
     if (existingUser.data) {
+      this.ngxService.stop();
       // User already exists
       this.toastr.error('User with this email already exists');
       return;
@@ -89,13 +91,15 @@ export class SignUpComponent implements OnInit {
           const { data, error } = await this.supabaseClient
             .from('projectAuthTable')
             .upsert([{ id, email, password }]);
-
+            this.ngxService.stop();
           this.toastr.success('Signup Successful');
           this.router.navigate(['/login']);
         })
         .catch((error) => {
           console.log(error);
+          this.ngxService.stop();
           this.toastr.error(
+            
             'An error occurred during signup. Please try again.'
           );
         });
