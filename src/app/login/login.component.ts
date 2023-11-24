@@ -11,11 +11,13 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
-
+  loginEmail = '';
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private auth: SupaService,private toastr: ToastrService,private ngxService: NgxUiLoaderService
+    private auth: SupaService,
+    private toastr: ToastrService,
+    private ngxService: NgxUiLoaderService
   ) {}
 
   ngOnInit() {
@@ -27,31 +29,56 @@ export class LoginComponent implements OnInit {
 
   onLoginSubmit() {
     this.ngxService.start();
-    if (this.loginForm.get('email')?.value.trim() === '' || this.loginForm.get('password')?.value === '') {
+
+    if (
+      this.loginForm.get('email')?.value.trim() === '' ||
+      this.loginForm.get('password')?.value === ''
+    ) {
       this.toastr.error('Email and password are required fields.');
       return;
     }
 
     if (this.loginForm.valid) {
       console.log('Login submitted', this.loginForm.value);
+
       this.auth
         .signIn(this.loginForm.value.email, this.loginForm.value.password)
-        .then((result) => {
+        .then(async (result) => {
           console.log(result);
+
           if (result.data.user?.role === 'authenticated') {
-            this.ngxService.stop();
-            this.toastr.success("Login Successful")
-            localStorage.setItem('token','847581de5f3a');
-            this.router.navigate(['/dashboard']);
-          } else {
-            this.ngxService.stop();
-            this.toastr.error('Invalid credentials. Please try again.');
+            const userEmail = result.data.user?.email ?? 'unknown';
+
+            const { data: userData, error: fetchError } =
+              await this.auth.supabaseClient
+                .from('projectAuthTable')
+                .select('fullName') // Add 'firstName' to the select query
+                .eq('email', userEmail)
+                .single();
+
+            if (fetchError) {
+              this.ngxService.stop();
+              console.error('Fetch user data error:', fetchError);
+              return;
+            } else if (userData) {
+              const { fullName } = userData;
+              localStorage.setItem('userName', fullName);
+              this.ngxService.stop();
+              this.toastr.success('Login Successful');
+              localStorage.setItem('token', '847581de5f3a');
+              this.router.navigate(['/dashboard']);
+            } else {
+              this.ngxService.stop();
+              this.toastr.error('Invalid credentials. Please try again.');
+            }
           }
         })
         .catch((error) => {
           this.ngxService.stop();
           console.log(error);
-          this.toastr.error('An error occurred during login. Please try again.');
+          this.toastr.error(
+            'An error occurred during login. Please try again.'
+          );
         });
     } else {
       this.ngxService.stop();

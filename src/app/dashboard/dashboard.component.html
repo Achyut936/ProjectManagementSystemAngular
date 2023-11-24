@@ -84,16 +84,24 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let project of filteredProjects">
-        <th scope="row">{{ project.projectId }}</th>
-        <td>{{ project.projectName }}</td>
-        <td>{{ project.client }}</td>
-        <td>{{ project.startDate | date : "yyyy-MM-dd" }}</td>
-        <td>{{ project.endDate | date : "yyyy-MM-dd" }}</td>
-        <td>{{ project.country }}</td>
-        <td>{{ project.budget }}</td>
-        <td>{{ project.status }}</td>
-      </tr>
+      <ng-container *ngIf="filteredProjects.length > 0; else noDataMessage">
+        <tr *ngFor="let project of filteredProjects">
+          <th scope="row">{{ project.projectId }}</th>
+          <td>{{ project.projectName }}</td>
+          <td>{{ project.client }}</td>
+          <td>{{ project.startDate | date : "yyyy-MM-dd" }}</td>
+          <td>{{ project.endDate | date : "yyyy-MM-dd" }}</td>
+          <td>{{ project.country }}</td>
+          <td>{{ project.budget }}</td>
+          <td>{{ project.status }}</td>
+        </tr>
+      </ng-container>
     </tbody>
+    
   </table>
+  <ng-template #noDataMessage class="text-center">
+    <div class="mt-3">
+      <p class="text-msg">No projects available</p>
+    </div>
+  </ng-template>
 </div>

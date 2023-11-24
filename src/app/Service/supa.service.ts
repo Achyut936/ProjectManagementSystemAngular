@@ -6,7 +6,7 @@ import { environment } from 'src/enviornment';
   providedIn: 'root',
 })
 export class SupaService {
-  private supabaseClient: SupabaseClient;
+  public supabaseClient: SupabaseClient;
   constructor() {
     this.supabaseClient = createClient(
       environment.supabaseUrl,

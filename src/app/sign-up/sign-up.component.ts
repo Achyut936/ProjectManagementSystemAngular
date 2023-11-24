@@ -19,7 +19,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class SignUpComponent implements OnInit {
   signupForm!: FormGroup;
-  uid = 20;
+  uid = Math.floor(10000 + Math.random() * 9000);
   supabaseClient = createClient(
     environment.supabaseUrl,
     environment.supabaseKey
@@ -35,7 +35,7 @@ export class SignUpComponent implements OnInit {
   ngOnInit() {
     
     this.signupForm = this.fb.group(
-      {
+      {fullName: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],
         password: [
           '',
@@ -80,8 +80,8 @@ export class SignUpComponent implements OnInit {
     }
 
     if (this.signupForm.valid) {
-      const { email, password } = this.signupForm.value;
-      const id = this.uid++; // Generate a UUID for the user
+      const { email, password,fullName } = this.signupForm.value;
+      const id = this.uid; // Generate a UUID for the user
 
       console.log('Signup submitted', { email, password, id });
 
@@ -90,7 +90,7 @@ export class SignUpComponent implements OnInit {
         .then(async () => {
           const { data, error } = await this.supabaseClient
             .from('projectAuthTable')
-            .upsert([{ id, email, password }]);
+            .upsert([{ id, email, password,fullName }]);
             this.ngxService.stop();
           this.toastr.success('Signup Successful');
           this.router.navigate(['/login']);

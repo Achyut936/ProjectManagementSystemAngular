@@ -17,6 +17,25 @@
 
           <div class="card-body">
             <form [formGroup]="signupForm" (ngSubmit)="onSignupSubmit()">
+              <label for="fullName"
+                >Full Name<span class="required-field">*</span></label
+              >
+              <input
+                id="fullName"
+                placeholder="Full Name"
+                type="text"
+                formControlName="fullName"
+                required
+              />
+              <div
+                *ngIf="
+                  signupForm.get('fullName')?.hasError('required') &&
+                  signupForm.get('fullName')?.touched
+                "
+                class="error-message"
+              >
+                Full Name is required
+              </div>
               <label for="email"
                 >Email<span class="required-field">*</span></label
               >

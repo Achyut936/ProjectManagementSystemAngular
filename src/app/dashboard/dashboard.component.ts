@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ProjectDataService } from '../Service/project-data.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
@@ -9,6 +9,12 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event: Event): void {
+    // Handle the popstate event (user clicked back or forward)
+    localStorage.clear();
+  }
+
   Projects: any[] = [];
   projectNames: any[] = [];
   months: { name: string; value: number }[] = [
