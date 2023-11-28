@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getProjectById(id: number) {
-    debugger;
+    
     this.projectData.getProjectDetailById(id).subscribe((data) => {
       const project = data as any;
 
